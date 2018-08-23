@@ -1,0 +1,140 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: task-service-mysql-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/nathan/Projects/skaioskit/server/task-service/working/mysql"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: task-service-mysql-pv-claim
+  labels:
+    app: task-service
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: task-service-mysql
+  labels:
+    app: task-service-mysql
+spec:
+  selector:
+    matchLabels:
+      app: task-service-mysql
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: task-service-mysql
+        tier: mysql
+    spec:
+      containers:
+      - image: mysql:5.7.22
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        - name: MYSQL_USER
+          value: skaioskit
+        - name: MYSQL_PASSWORD
+          value: password
+        - name: MYSQL_DATABASE
+          value: task
+          # TODO: use secrets
+          #  valueFrom:
+          #    secretKeyRef:
+          #      name: mysql-pass
+          #      key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: task-service-mysql-pv-claim
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: task-service-mysql
+spec:
+  selector:
+    app: task-service-mysql
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: task-service
+  labels:
+    app: task-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: task-service
+    spec:
+      containers:
+      - name: task-service
+        image: localhost:5000/skaioskit/task-service:latest
+        imagePullPolicy: Always
+        command: 
+        - /task
+        - serve
+        ports:
+        - containerPort: 80
+        env:
+        - name: BUILD_DATETIME
+          value: "{{BUILD_TIME}}"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: task-service
+spec:
+  selector:
+    app: task-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: task-service-lb
+spec:
+  type: NodePort
+  selector:
+    app: task-service
+  ports:
+  - port: 80
+    nodePort: 30080
+---
