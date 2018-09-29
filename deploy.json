@@ -144,6 +144,8 @@
                             "docker",
                             "run",
                             "-it",
+                            "-p",
+                            "8080:80",
                             "localhost:5000/skaioskit/task-service",
                             "/task",
                             "serve"
