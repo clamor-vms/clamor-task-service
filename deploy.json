@@ -141,13 +141,7 @@
                     "Type": "RunCommand",
                     "Args": {
                         "Command": [
-                            "docker",
-                            "run",
-                            "-it",
-                            "-p",
-                            "8080:80",
-                            "localhost:5000/skaioskit/task-service",
-                            "/task",
+                            "./src/task",
                             "serve"
                         ]
                     }
