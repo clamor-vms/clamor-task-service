@@ -22,3 +22,4 @@ deployment.yaml
 src/core
 src_old
 src/env
+src/config
