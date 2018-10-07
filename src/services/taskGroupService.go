@@ -37,9 +37,9 @@ func (p *TaskGroupService) UpdateTaskGroup(taskGroup models.TaskGroup) models.Ta
 }
 
 // GetTaskGroup 
-func (p *TaskGroupService) GetTaskGroup(name string) (models.TaskGroup, error) {
+func (p *TaskGroupService) GetTaskGroup(id uint) (models.TaskGroup, error) {
     var taskGroup models.TaskGroup
-    err := p.db.Where(&models.TaskGroup{Name: name}).First(&taskGroup).Error
+    err := p.db.First(&taskGroup, id).Error
     return taskGroup, err
 }
 
@@ -56,7 +56,7 @@ func (p *TaskGroupService) EnsureTaskGroupTable() {
 
 // EnsureTaskGroup	test
 func (p *TaskGroupService) EnsureTaskGroup(taskGroup models.TaskGroup) {
-    existing, err := p.GetTaskGroup(taskGroup.Name)
+    existing, err := p.GetTaskGroup(taskGroup.ID)
     if err != nil {
         p.CreateTaskGroup(taskGroup)
     } else {
