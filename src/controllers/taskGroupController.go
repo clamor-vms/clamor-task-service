@@ -22,28 +22,42 @@ import (
 	skaioskit "github.com/nathanmentley/skaioskit-go-core"
 
 	"skaioskit/core"
+	"skaioskit/services"
 )
 
-type AboutController struct {
+// TaskGroupController
+type TaskGroupController struct {
+	taskGroupService services.ITaskGroupService
 }
 
-func NewAboutController() *AboutController {
-	return &AboutController{}
+// NewTaskGRoupController create controller and handle model / service
+func NewTaskGroupController(taskGroupService services.ITaskGroupService) *TaskGroupController {
+	return &TaskGroupController{
+		taskGroupService: taskGroupService,
+	}
 }
-func (p *AboutController) Get(w http.ResponseWriter, r *http.Request) skaioskit.ControllerResponse {
+
+// Get
+func (p *TaskGroupController) Get(w http.ResponseWriter, r *http.Request) skaioskit.ControllerResponse {
 	return skaioskit.ControllerResponse{Status: http.StatusOK, Body: GetAboutResponse{
-		Name:        "Skaioskit Task Service",
+		Name:        "Clamour task group controller basic return",
 		CoreVersion: skaioskit.VERSION,
 		Version:     core.SERVICE_VERSION,
 		BuildTime:   os.Getenv("BUILD_DATETIME"),
 	}}
 }
-func (p *AboutController) Post(w http.ResponseWriter, r *http.Request) skaioskit.ControllerResponse {
+
+// Post
+func (p *TaskGroupController) Post(w http.ResponseWriter, r *http.Request) skaioskit.ControllerResponse {
 	return skaioskit.ControllerResponse{Status: http.StatusNotFound, Body: skaioskit.EmptyResponse{}}
 }
-func (p *AboutController) Put(w http.ResponseWriter, r *http.Request) skaioskit.ControllerResponse {
+
+// Put
+func (p *TaskGroupController) Put(w http.ResponseWriter, r *http.Request) skaioskit.ControllerResponse {
 	return skaioskit.ControllerResponse{Status: http.StatusNotFound, Body: skaioskit.EmptyResponse{}}
 }
-func (p *AboutController) Delete(w http.ResponseWriter, r *http.Request) skaioskit.ControllerResponse {
+
+// Delete
+func (p *TaskGroupController) Delete(w http.ResponseWriter, r *http.Request) skaioskit.ControllerResponse {
 	return skaioskit.ControllerResponse{Status: http.StatusNotFound, Body: skaioskit.EmptyResponse{}}
 }

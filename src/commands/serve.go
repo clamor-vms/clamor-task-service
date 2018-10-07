@@ -45,6 +45,7 @@ var serveCmd = &cobra.Command{
 
         //setup services
         userService := services.NewUserService(db)
+        taskGroupService := services.NewTaskGroupService(db)
 
         //ensure database strcuture
         userService.EnsureUserTable()
@@ -52,11 +53,13 @@ var serveCmd = &cobra.Command{
         //build controllers
         aboutController := skaioskit.NewControllerProcessor(controllers.NewAboutController())
         userController := skaioskit.NewControllerProcessor(controllers.NewUserController(userService))
+        taskGroupController := skaioskit.NewControllerProcessor(controllers.NewTaskGroupController(taskGroupService))
 
         //setup routing to controllers
         r := mux.NewRouter()
         r.HandleFunc("/about", aboutController.Logic)
         r.HandleFunc("/user", userController.Logic)
+        r.HandleFunc("/taskGroups", taskGroupController.Logic)
 
         //wrap everything behind a jwt middleware
         jwtMiddleware := skaioskit.JWTEnforceMiddleware([]byte(core.JWT_SECRET))

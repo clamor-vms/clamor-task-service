@@ -11,5 +11,6 @@ type TaskGroup struct {
 	CampaignID  int
 	ID          uint   `gorm:"primary_key"`
 	Name        string `gorm:"size:255"`
-	Description string `gorm:"size:2500"`
+	Description string
+	Tasks 		[]Task `gorm:"foreignkey:TaskGroupID;association_foreignkey:TaskGroupID"`
 }
