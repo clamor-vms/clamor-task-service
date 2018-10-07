@@ -17,10 +17,11 @@ package controllers
 
 import (
 	"net/http"
+	"encoding/json"
+	"strconv"
 	"os"
 
 	skaioskit "github.com/nathanmentley/skaioskit-go-core"
-
 	"skaioskit/core"
 	"skaioskit/services"
 )
@@ -39,12 +40,33 @@ func NewTaskGroupController(taskGroupService services.ITaskGroupService) *TaskGr
 
 // Get
 func (p *TaskGroupController) Get(w http.ResponseWriter, r *http.Request) skaioskit.ControllerResponse {
-	return skaioskit.ControllerResponse{Status: http.StatusOK, Body: GetAboutResponse{
-		Name:        "Clamour task group controller basic return",
-		CoreVersion: skaioskit.VERSION,
-		Version:     core.SERVICE_VERSION,
-		BuildTime:   os.Getenv("BUILD_DATETIME"),
-	}}
+
+	idStr, ok := r.URL.Query()["id"]
+
+	if ok {
+		id, err := strconv.ParseUint(idStr[0], 10, 32)
+		if err == nil {
+			taskGroup, err := p.taskGroupService.GetTaskGroup(uint(id))
+			if err == nil {
+				return skaioskit.ControllerResponse{Status: http.StatusOK, Body: taskGroup}
+			}
+		}
+	} else {
+		taskGroups, err := p.taskGroupService.GetTaskGroups()
+		if err == nil {
+			return skaioskit.ControllerResponse{Status: http.StatusOK, Body: GetTaskGroupResponse{TaskGroups: taskGroups}}
+		}
+	}
+	
+	return skaioskit.ControllerResponse{Status: http.StatusNotFound, Body: skaioskit.EmptyResponse{}}
+
+
+	// return skaioskit.ControllerResponse{Status: http.StatusOK, Body: GetAboutResponse{
+	// 	Name:        "Clamour task group controller basic return",
+	// 	CoreVersion: skaioskit.VERSION,
+	// 	Version:     core.SERVICE_VERSION,
+	// 	BuildTime:   os.Getenv("BUILD_DATETIME"),
+	// }}
 }
 
 // Post

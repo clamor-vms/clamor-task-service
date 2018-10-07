@@ -9,7 +9,8 @@ import (
 type ITaskGroupService interface {
     CreateTaskGroup(models.TaskGroup) models.TaskGroup
     UpdateTaskGroup(models.TaskGroup) models.TaskGroup
-    GetTaskGroup(string) (models.TaskGroup, error)
+    GetTaskGroup(uint) (models.TaskGroup, error)
+    GetTaskGroups() ([]models.TaskGroup, error)
     EnsureTaskGroupTable()
 }
 

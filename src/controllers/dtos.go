@@ -15,9 +15,17 @@
 
 package controllers
 
+import (
+    "skaioskit/models"
+)
+
 type GetAboutResponse struct {
     Name string
     CoreVersion string
     Version string
     BuildTime string
+}
+
+type GetTaskGroupResponse struct {
+    TaskGroups []models.TaskGroup
 }
