@@ -28,7 +28,7 @@ class TaskGroupSchema(ma.Schema):
 # Models *****************************
 class TaskGroup(db.Model):
     __tablename__ = 'taskGroups'
-    id = db.Column(db.integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=True, nullable=False)
     description = db.Column(db.String(4055), unique=False, nullable=True)
     tasks = db.relationship("Task", back_populates="taskGroups")
@@ -40,11 +40,11 @@ class TaskGroup(db.Model):
 
 class Task(db.Model):
     __tablename__ = 'tasks'
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=True, nullable=False)
     description = db.Column(db.String(4055), unique=False, nullable=True)
-    task_group_id = Column(Integer, ForeignKey('taskGroup.id'))
-    taskGroup = relationship("TaskGroup", back_populates="taskGroups")
+    task_group_id = db.Column(db.Integer, db.ForeignKey('taskGroup.id'))
+    taskGroup = db.relationship("TaskGroup", back_populates="taskGroups")
 
     def __init__(self, name, description, task_group_id):
         self.name = name
