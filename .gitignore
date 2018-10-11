@@ -23,3 +23,6 @@ src/core
 src_old
 src/env
 src/config
+*.cpython
+__pycache__
+migrations
