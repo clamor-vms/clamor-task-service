@@ -1,6 +1,7 @@
 from flask import Flask
 from marshmallow import Schema, fields, pre_load, validate
-from Model import db, ma
+from .Model import db, ma
+from .Task import TaskSchema, Task
 
 
 class TaskGroupSchema(ma.Schema):
