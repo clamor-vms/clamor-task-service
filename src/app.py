@@ -6,6 +6,7 @@ from resources.TaskGroups import TaskGroupResource
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
 
+
 # Route
 api.add_resource(Hello, '/Hello')
 api.add_resource(TaskGroupResource, '/taskGroups')

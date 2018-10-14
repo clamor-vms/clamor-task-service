@@ -22,7 +22,7 @@ deployment.yaml
 src/core
 src_old
 src/env
-src/config
+src/config.py
 *.cpython
 __pycache__
 migrations

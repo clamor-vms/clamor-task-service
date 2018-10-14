@@ -1,14 +1,7 @@
 from flask import Flask
-from marshmallow import Schema, fields, pre_load, validate
-from .Model import db, ma
-from .Task import TaskSchema, Task
-
-
-class TaskGroupSchema(ma.Schema):
-    id = fields.Integer()
-    name = fields.String(required=True)
-    description = fields.String(required=True)
-    tasks = fields.List(fields.Nested(TaskSchema()))
+from .Model import db
+from .TaskSchema import TaskSchema
+from .Task import Task
 
 
 class TaskGroup(db.Model):
@@ -16,7 +9,7 @@ class TaskGroup(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=True, nullable=False)
     description = db.Column(db.String(4055), unique=False, nullable=True)
-    tasks = db.relationship("Task", back_populates="taskGroups")
+    tasks = db.relationship("Task", back_populates="taskGroup")
 
     def __init__(self, name, description):
         self.name = name
