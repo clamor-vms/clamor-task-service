@@ -11,6 +11,6 @@ class TaskGroupSchema(ma.Schema):
     description = fields.String(required=True)
     tasks = fields.List(fields.Nested(TaskSchema()))
 
-    @post_load
-    def create_task_group(self, data):
-        return TaskGroup(data)
+    # @post_load
+    # def create_task_group(self, data):
+    #     return TaskGroup(data)

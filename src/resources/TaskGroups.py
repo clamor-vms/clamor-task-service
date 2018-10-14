@@ -1,5 +1,6 @@
 from flask import request
 from flask_restful import Resource
+from models.Model import db
 from models.TaskGroupSchema import TaskGroupSchema
 from models.TaskGroup import TaskGroup
 
@@ -18,7 +19,7 @@ class TaskGroupResource(Resource):
         if not json_data:
             return {'message': 'No input data provided'}, 400
         # Validate and deserialize input
-        data, errors = taskgroups_schema.load(json_data)
+        data, errors = taskgroup_schema.load(json_data)
         if errors:
             return {
                 'err': errors,
@@ -29,12 +30,13 @@ class TaskGroupResource(Resource):
         if taskGroup:
             return {'message': 'Task Group already exists'}, 400
         taskGroup = TaskGroup(
-            name=json_data['name']
+            name=json_data['name'],
+            description=json_data['description']
         )
 
         db.session.add(taskGroup)
         db.session.commit()
 
-        result = taskgroups_schema.dump(taskGroup).data
+        result = taskgroup_schema.dump(taskGroup).data
 
         return {"status": 'success', 'data': result}, 201
