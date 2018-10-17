@@ -1,0 +1,40 @@
+from flask import request
+from flask_restful import Resource
+from models.Model import db
+from models.TaskSchema import TaskSchema
+from models.Task import Task
+from models.TaskGroup import TaskGroup
+
+tasks_schema = TaskSchema(many=True)
+task_schema = TaskSchema()
+
+
+class TaskResource(Resource):
+    def get(self):
+        tasks = Task.query.all()
+        tasks = tasks_schema.dump(tasks).data
+        return {"status": "succcess", "data": tasks}, 200
+
+    def post(self):
+        json_data = request.get_json(force=True)
+        if not json_data:
+            return {"message": "No input provided."}, 400
+        # validate / deserialize input.
+        data, errors = task_schema.load(json_data)
+        if errors:
+            return {"status": "error", "data": errors}, 422
+        task_group_id = TaskGroup.query.filter_by(
+            id=data["task_group_id"]).first()
+        if not task_group_id:
+            return {"error": "Task group not found"}
+        task = Task(
+            task_group_id=data["task_group_id"],
+            name=data["name"],
+            description=data["description"]
+        )
+        db.session.add(task)
+        db.session.commit()
+
+        result = task_schema.dump(task).data
+
+        return {"status": "success", "data": result}, 201
