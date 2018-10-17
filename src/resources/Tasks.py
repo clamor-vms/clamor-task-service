@@ -38,3 +38,47 @@ class TaskResource(Resource):
         result = task_schema.dump(task).data
 
         return {"status": "success", "data": result}, 201
+
+    def put(self):
+        json_data = request.get_json(force=True)
+        if not json_data:
+            return {"message": "No input provided."}, 400
+        data, errors = task_schema.load(json_data)
+        if errors:
+            return {"status": "error", "data": data}
+
+        task = Task.query.filter_by(
+            task_group_id=data["task_group_id"],
+            id=data["id"]
+        ).first()
+        if not task:
+            return {"error": "Something went wrong getting task."}
+
+        task.name = data['name']
+        task.description = data['description']
+        db.session.commit()
+
+        result = task_schema.dump(task).data
+
+        return {"status": 'success', 'data': result}, 204
+
+    def delete(self):
+        json_data = request.get_json(force=True)
+        if not json_data:
+            return {'message': 'No input data provided'}, 400
+        # Validate and deserialize input
+        data, errors = task_schema.load(json_data)
+        if errors:
+            return errors, 422
+        task = Task.query.filter_by(
+            task_group_id=data["task_group_id"],
+            id=data["id"]
+        ).delete()
+
+        db.session.commit()
+        result = task_schema.dump(task).data
+
+        return {
+            "status": 'success',
+            'retrieved data for delete(delete not set)': result
+        }, 204
