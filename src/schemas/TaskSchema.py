@@ -1,5 +1,5 @@
 from flask import Flask
-from .Model import ma
+from models import ma
 from marshmallow import Schema, fields, pre_load, validate
 
 

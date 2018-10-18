@@ -1,8 +1,8 @@
 from flask import Flask
 from marshmallow import Schema, fields, pre_load, validate, post_load
-from .Model import ma
+from models import ma, TaskGroup
 from .TaskSchema import TaskSchema
-from .TaskGroup import TaskGroup
+# from models.TaskGroup import TaskGroup
 
 
 class TaskGroupSchema(ma.Schema):

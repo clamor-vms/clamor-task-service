@@ -1,9 +1,7 @@
 from flask import request
 from flask_restful import Resource
-from models.Model import db
-from models.TaskSchema import TaskSchema
-from models.Task import Task
-from models.TaskGroup import TaskGroup
+from models import db, TaskGroup, Task
+from schemas import TaskSchema
 
 tasks_schema = TaskSchema(many=True)
 task_schema = TaskSchema()
