@@ -1,7 +1,7 @@
 from flask import Flask
-from schemas import TaskSchema
-from .Task import Task
+# from schemas import TaskSchema
 from .Model import db
+from .Task import Task
 
 
 class TaskGroup(db.Model):
