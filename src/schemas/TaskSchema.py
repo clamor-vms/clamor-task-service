@@ -1,7 +1,7 @@
 from flask import Flask
-from marshmallow import Schema, fields, pre_load, validate
-from models import ma, Task
-from .TaskStatusSchema import TaskStatusSchema
+from marshmallow import Schema, fields, pre_load, validate, post_load
+from models import ma
+from schemas import TaskStatusSchema, TaskAssignmentSchema
 
 # Custom validator
 
@@ -16,7 +16,5 @@ class TaskSchema(ma.Schema):
     name = fields.String(required=True)
     description = fields.String(required=True)
     task_group_id = fields.Integer()
-    task_status = fields.Nested(
-        TaskStatusSchema,
-        must_not_be_blank
-    )
+    task_status = fields.Nested(TaskStatusSchema, must_not_be_blank)
+    assignments = fields.List(fields.Nested(TaskAssignmentSchema))

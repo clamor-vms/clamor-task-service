@@ -1,7 +1,7 @@
 from flask import Flask
 from schemas import TaskStatusSchema
 from .Model import db
-from models import TaskStatus
+from models import TaskStatus, TaskAssignment
 
 
 class Task(db.Model):
@@ -12,11 +12,12 @@ class Task(db.Model):
     task_group_id = db.Column(db.Integer, db.ForeignKey('taskGroups.id'))
     task_status_id = db.Column(db.Integer, db.ForeignKey("taskStatuses.id"))
 
-    taskGroup = db.relationship("TaskGroup", back_populates="tasks")
-    task_status = db.relationship("TaskStatus", foreign_keys=[task_status_id])
+    taskStatus = db.relationship("TaskStatus", foreign_keys=[task_status_id])
     assignments = db.relationship("TaskAssignment", back_populates="task")
+    taskGroup = db.relationship("TaskGroup", back_populates="tasks")
 
-    def __init__(self, name, description, task_group_id):
+    def __init__(self, name, description, task_group_id, task_status_id):
         self.name = name
         self.description = description
         self.task_group_id = task_group_id
+        self.task_status_id = task_status_id

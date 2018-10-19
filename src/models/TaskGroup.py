@@ -1,5 +1,4 @@
 from flask import Flask
-# from schemas import TaskSchema
 from .Model import db
 from .Task import Task
 
