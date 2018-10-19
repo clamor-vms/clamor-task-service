@@ -77,6 +77,16 @@ spec:
         command: 
         - python
         - /usr/src/app/run.py
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - "sh"
+              - "-c"
+              - >
+                python migrate.py db init;
+                python migrate.py db migrate;
+                python migrate.py db upgrade;
         ports:
         - containerPort: 80
         env:
