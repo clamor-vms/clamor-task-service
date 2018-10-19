@@ -14,13 +14,8 @@
 # 
 .DS_Store
 *.swp
-src/task
-src/vendor
-src/vendor.orig
-config/config.yaml
 deployment.yaml
 src/core
-src_old
 src/env
 src/config.py
 *.cpython

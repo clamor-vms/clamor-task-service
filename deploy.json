@@ -1,49 +1,6 @@
 {
     "Title": "Skaioskit Task Service",
     "Commands": {
-        "_build": {
-            "Requires": [],
-            "Steps": [
-                {
-                    "Type": "RunCommand",
-                    "Args": {
-                        "Command": [
-                            "docker",
-                            "run",
-                            "--rm",
-                            "-v",
-                            "${DIR}/src:/go/src/skaioskit",
-                            "-w",
-                            "/go/src/skaioskit",
-                            "lushdigital/docker-golang-dep",
-                            "ensure"
-                        ]
-                    }
-                },
-                {
-                    "Type": "RunCommand",
-                    "Args": {
-                        "Command": [
-                            "docker",
-                            "run",
-                            "--rm",
-                            "-v",
-                            "${DIR}/src:/go/src/skaioskit",
-                            "-w",
-                            "/go/src/skaioskit",
-                            "golang:latest",
-                            "go",
-                            "build",
-                            "-ldflags",
-                            "-linkmode external -extldflags -static",
-                            "-o",
-                            "task"
-                        ]
-                    }
-                }
-            ]
-        },
-
         "_pack": {
             "Requires": [],
             "Steps": [
@@ -81,7 +38,7 @@
         },
 
         "build": {
-            "Requires": ["_build", "_pack", "_upload"],
+            "Requires": ["_pack", "_upload"],
             "Steps": []
         },
         
@@ -135,7 +92,7 @@
         },
 
         "run": {
-            "Requires": ["_build", "_pack"],
+            "Requires": ["_pack"],
             "Steps": [
                 {
                     "Type": "RunCommand",

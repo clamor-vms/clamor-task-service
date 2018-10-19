@@ -1,5 +1,10 @@
-FROM drone/ca-certs
+FROM python:3.7.0-stretch
 
-ADD src/task /
+WORKDIR /usr/src/app
 
-CMD ["/task"]
+COPY src/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ./src .
+
+CMD ["python", "run.py"]

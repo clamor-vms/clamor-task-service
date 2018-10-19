@@ -75,8 +75,8 @@ spec:
         image: localhost:5000/skaioskit/task-service:latest
         imagePullPolicy: Always
         command: 
-        - /task
-        - serve
+        - python
+        - /usr/src/app/run.py
         ports:
         - containerPort: 80
         env:
@@ -94,7 +94,7 @@ spec:
               key: value
         volumeMounts:
         - name: log-storage
-          mountPath: /logs
+          mountPath: /usr/src/logs
       volumes:
       - name: log-storage
         hostPath:

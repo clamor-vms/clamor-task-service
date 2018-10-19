@@ -8,5 +8,5 @@ api = Api(api_bp)
 
 
 # Route
-api.add_resource(Hello, '/Hello')
+api.add_resource(Hello, '/hello')
 api.add_resource(TaskGroupResource, '/taskGroups')
