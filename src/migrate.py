@@ -5,9 +5,9 @@ from run import create_app
 
 app = create_app('config')
 
-migrate = Migrate(app, db)
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
+migrate = migrate(app, db)
+manager = manager(app)
+manager.add_command('db', migratecommand)
 
 
 if __name__ == '__main__':
