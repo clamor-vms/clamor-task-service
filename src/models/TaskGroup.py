@@ -1,6 +1,6 @@
 from flask import Flask
-from .Model import db
 from .Task import Task
+from .Model import db
 
 
 class TaskGroup(db.Model):
