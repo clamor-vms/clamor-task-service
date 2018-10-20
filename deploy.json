@@ -1,5 +1,5 @@
 {
-    "Title": "Skaioskit Task Service",
+    "Title": "Clamor Task Service",
     "Commands": {
         "_pack": {
             "Requires": [],
@@ -13,7 +13,7 @@
                             "-f",
                             "./Dockerfile",
                             "-t",
-                            "localhost:5000/skaioskit/task-service",
+                            "localhost:5000/clamor/task-service",
                             "."
                         ]
                     }
@@ -30,7 +30,7 @@
                         "Command": [
                             "docker",
                             "push",
-                            "localhost:5000/skaioskit/task-service"
+                            "localhost:5000/clamor/task-service"
                         ]
                     }
                 }
@@ -48,13 +48,13 @@
                 {
                     "Type": "EnsureSecret",
                     "Args": {
-                        "Key": "skaioskit-task-service-mysql-password"
+                        "Key": "clamor-task-service-mysql-password"
                     }
                 },
                 {
                     "Type": "EnsureSecret",
                     "Args": {
-                        "Key": "skaioskit-task-service-mysql-root-password"
+                        "Key": "clamor-task-service-mysql-root-password"
                     }
                 },
                 {

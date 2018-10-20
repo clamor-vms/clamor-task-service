@@ -22,18 +22,18 @@ spec:
         name: mysql
         env:
         - name: MYSQL_USER
-          value: skaioskit
+          value: clamor
         - name: MYSQL_DATABASE
           value: task
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: skaioskit-task-service-mysql-root-password
+              name: clamor-task-service-mysql-root-password
               key: value
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: skaioskit-task-service-mysql-password
+              name: clamor-task-service-mysql-password
               key: value
         ports:
         - containerPort: 3306
@@ -72,7 +72,7 @@ spec:
     spec:
       containers:
       - name: task-service
-        image: localhost:5000/skaioskit/task-service:latest
+        image: localhost:5000/clamor/task-service:latest
         imagePullPolicy: Always
         command: 
         - python
@@ -95,12 +95,12 @@ spec:
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
-              name: skaioskit-jwt-secret
+              name: clamor-jwt-secret
               key: value
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: skaioskit-task-service-mysql-password
+              name: clamor-task-service-mysql-password
               key: value
         volumeMounts:
         - name: log-storage
