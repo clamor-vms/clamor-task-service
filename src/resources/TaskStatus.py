@@ -10,5 +10,5 @@ task_status_schema = TaskStatusSchema()
 class TaskStatusResource(Resource):
     def get(self):
         task_statuses = TaskStatus.query.all()
-        task_statuses = task_status_schema.dump(task_statuses).data
-        return {"status": "succcess", "data": task_statuses}, 200
+        result = task_statuses_schema.dump(task_statuses).data
+        return {"status": "succcess", "data": result}, 200

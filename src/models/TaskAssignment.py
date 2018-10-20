@@ -1,7 +1,7 @@
 import datetime
 from flask import Flask
 from schemas import TaskSchema
-from models import db, Task
+from models import Task, db
 
 
 class TaskAssignment(db.Model):

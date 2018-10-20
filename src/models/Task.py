@@ -1,7 +1,6 @@
 from flask import Flask
 from schemas import TaskStatusSchema
-from .Model import db
-from models import TaskStatus, TaskAssignment
+from models import TaskStatus, TaskAssignment, db
 
 
 class Task(db.Model):
