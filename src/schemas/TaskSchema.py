@@ -16,5 +16,6 @@ class TaskSchema(ma.Schema):
     name = fields.String(required=True)
     description = fields.String(required=True)
     task_group_id = fields.Integer()
-    task_status = fields.Nested(TaskStatusSchema, must_not_be_blank)
+    task_status_id = fields.Integer()
     assignments = fields.List(fields.Nested(TaskAssignmentSchema))
+#   task_status_id = fields.Nested(TaskStatusSchema, must_not_be_blank)

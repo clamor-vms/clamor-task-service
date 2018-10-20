@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from models import db, TaskGroup, Task
+from models import db, TaskGroup, Task, TaskStatus
 from schemas import TaskSchema
 
 tasks_schema = TaskSchema(many=True)
@@ -21,14 +21,30 @@ class TaskResource(Resource):
         data, errors = task_schema.load(json_data)
         if errors:
             return {"status": "error", "data": errors}, 422
+
+        # Check for valid task group
         task_group_id = TaskGroup.query.filter_by(
-            id=data["task_group_id"]).first()
+            id=data["task_group_id"]
+        ).first()
+
         if not task_group_id:
             return {"error": "Task group not found"}
+
+        # Check for valid task status
+        task_status_id = TaskStatus.query.filter_by(
+            id=data["task_status_id"]
+        ).first()
+
+        if not task_status_id:
+            return {
+                "error": "You must enter a valid Task Status id."
+            }
+
         task = Task(
-            task_group_id=data["task_group_id"],
             name=data["name"],
-            description=data["description"]
+            description=data["description"],
+            task_group_id=data["task_group_id"],
+            task_status_id=data["task_status_id"]
         )
         db.session.add(task)
         db.session.commit()
