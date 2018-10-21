@@ -8,4 +8,5 @@ class TaskGroupSchema(ma.Schema):
     id = fields.Integer()
     name = fields.String(required=True)
     description = fields.String(required=True)
-    tasks = fields.List(fields.Nested(TaskSchema))
+    tasks = fields.Nested('TaskSchema', many=True,
+                          exclude=('taskGroup', 'task_group_id'))

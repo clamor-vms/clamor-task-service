@@ -9,9 +9,26 @@ taskgroup_schema = TaskGroupSchema()
 
 class TaskGroupResource(Resource):
     def get(self):
-        taskgroups = TaskGroup.query.all()
-        taskgroups = taskgroups_schema.dump(taskgroups).data
-        return {'status': 'success', 'data': taskgroups}, 200
+        # get :id
+        if request.args:
+            param = request.args['id']
+            if param:
+                taskGroup = TaskGroup.query.filter_by(id=param).first()
+                result = taskgroup_schema.dump(taskGroup).data
+                return {
+                    'status': 'success',
+                    'data': result
+                }, 200
+            else:
+                return {
+                    'status': 'not found',
+                    'message': 'couldn\'t find any records'
+                }, 404
+        else:
+            # get all
+            taskgroups = TaskGroup.query.all()
+            taskgroups = taskgroups_schema.dump(taskgroups).data
+            return {'status': 'success', 'data': taskgroups}, 200
 
     def post(self):
         json_data = request.get_json(force=True)

@@ -1,6 +1,6 @@
 from flask import Flask
 from marshmallow import Schema, fields, pre_load, validate
-from models import ma, Task
+from models import ma
 
 
 class TaskAssignmentSchema(ma.Schema):

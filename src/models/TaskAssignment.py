@@ -14,6 +14,7 @@ class TaskAssignment(db.Model):
     )
     end_date = db.Column(db.DateTime, nullable=True)
     user_id = db.Column(db.Integer())
+
     task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'))
     task = db.relationship("Task", back_populates="assignments")
 

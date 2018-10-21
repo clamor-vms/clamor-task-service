@@ -9,9 +9,26 @@ task_schema = TaskSchema()
 
 class TaskResource(Resource):
     def get(self):
-        tasks = Task.query.all()
-        tasks = tasks_schema.dump(tasks).data
-        return {"status": "succcess", "data": tasks}, 200
+        # get :id
+        if request.args:
+            param = request.args['id']
+            if param:
+                task = Task.query.filter_by(id=param).first()
+                result = task_schema.dump(task).data
+                return {
+                    'status': 'success',
+                    'data': result
+                }, 200
+            else:
+                return {
+                    'status': 'not found',
+                    'message': 'couldn\'t find any records'
+                }, 404
+        else:
+            # get all
+            tasks = Task.query.all()
+            tasks = tasks_schema.dump(tasks).data
+            return {"status": "succcess", "data": tasks}, 200
 
     def post(self):
         json_data = request.get_json(force=True)
