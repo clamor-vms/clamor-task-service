@@ -15,6 +15,7 @@
 
 from models import db, Task, TaskGroup, TaskStatus
 from schemas import TaskSchema
+from utilities import ValidEntry
 
 tasks_schema = TaskSchema(many=True)
 task_schema = TaskSchema()
@@ -37,31 +38,23 @@ class TaskService:
         """Create new task."""
         # validate / deserialize input.
         data, errors = task_schema.load(json_data)
+
         if errors:
             err = {"message": errors}
             return {}, err
 
         # Check for valid task group
-        task_group_id = TaskGroup.query.filter_by(
-            id=data["task_group_id"]
-        ).first()
-
-        if not task_group_id:
+        if not ValidEntry(TaskGroup, id=data["task_group_id"]):
             err = {"message": "Task group not found"}
             return {}, err
 
         # Check for valid task status
-        task_status_id = TaskStatus.query.filter_by(
-            id=data["task_status_id"]
-        ).first()
-
-        if not task_status_id:
+        if not ValidEntry(TaskStatus, id=data["task_status_id"]):
             err = {"message": "You must enter a valid Task Status id."}
             return {}, err
 
-        exists = Task.query.filter_by(name=data['name']).first()
-
-        if exists:
+        # check if already exists
+        if ValidEntry(Task, name=data['name']):
             err = {'message': 'Task with that name already exists'}
             return {}, err
 
@@ -77,31 +70,44 @@ class TaskService:
 
         return task_schema.dump(task).data, None
 
-    # def UpdateTask(self, json_data):
-    #     """Update an existing task."""
-    #     data, errors = taskgroup_schema.load(json_data)
+    def UpdateTask(self, json_data):
+        """Update an existing task."""
+        data, errors = task_schema.load(json_data)
+        if errors:
+            return {"status": "error", "data": data}
 
-    #     if errors:
-    #         return {}, {'message': errors}
+        if not "id" in data or not "task_group_id" in data:
+            err = {"message": "Id, and Task group ID are required."}
+            return {}, err
 
-    #     taskGroup = TaskGroup.query.filter_by(id=data['id']).first()
+        task = ValidEntry(
+            Task, task_group_id=data["task_group_id"], id=data["id"]
+        )
+        if not task:
+            err = {"message": "Something went wrong getting task."}
+            return {}, err
 
-    #     if not taskGroup:
-    #         return {}, {'message': 'Task Group does not exist'}
+        task.name = data['name']
+        task.description = data['description']
+        if data['task_status_id']:
+            task.task_status_id = data['task_status_id']
 
-    #     taskGroup.name = data['name']
-    #     taskGroup.description = data['description']
-    #     db.session.commit()
+        db.session.commit()
 
-    #     return taskgroup_schema.dump(taskGroup).data, errors
+        return task_schema.dump(task).data, None
 
-    # def DeleteTask(self, json_data):
-    #     """Delete existing task group."""
-    #     data, errors = taskgroup_schema.load(json_data)
-    #     if errors:
-    #         return {}, errors
+    def DeleteTask(self, json_data):
+        """Delete existing task group."""
+        data, errors = task_schema.load(json_data)
 
-    #     taskGroup = TaskGroup.query.filter_by(id=data['id']).delete()
-    #     db.session.commit()
+        if errors:
+            return {}, errors, 400
 
-    #     return taskgroup_schema.dump(taskGroup).data, errors
+        task = Task.query.filter_by(
+            task_group_id=data["task_group_id"],
+            id=data["id"]
+        ).delete()
+
+        db.session.commit()
+
+        return task_schema.dump(task).data, None
