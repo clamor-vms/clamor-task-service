@@ -1,3 +1,18 @@
+'''
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+'''
+
 from models.Model import db
 from flask import Flask
 from app import api_bp
@@ -28,7 +43,10 @@ def create_app(config_filename):
 
 @app.before_first_request
 def seed_database():
-    from models import db
+    # Ensure dbtables.
+    db.create_all()
+
+    # Ensure statuses
     status = TaskStatus.query.all()
     if not status:
         print("no task statuses found, seeding status data...")
