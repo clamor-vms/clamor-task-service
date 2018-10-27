@@ -22,7 +22,7 @@ task_assignments_schema = TaskAssignmentSchema(many=True)
 task_assignment_schema = TaskAssignmentSchema()
 
 
-class TaskAssignmentResource(Resource):
+class TaskAssignmentController(Resource):
     def get(self):
         # get :id
         if request.args:
