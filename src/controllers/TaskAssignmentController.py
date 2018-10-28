@@ -16,11 +16,13 @@
 from flask import request
 from flask_restful import Resource
 from services import TaskAssignmentService
+from flask_jwt_simple import jwt_required
 
 assignments = TaskAssignmentService()
 
 
 class TaskAssignmentController(Resource):
+    @jwt_required
     def get(self):
         # get :id
         if request.args:
@@ -41,6 +43,7 @@ class TaskAssignmentController(Resource):
             result = assignments.GetAssignments()
             return {"status": "succcess", "data": result}, 200
 
+    @jwt_required
     def post(self):
         json_data = request.get_json(force=True)
         if not json_data:
@@ -53,6 +56,7 @@ class TaskAssignmentController(Resource):
 
         return {"status": 'success', 'data': result}, 201
 
+    @jwt_required
     def put(self):
         json_data = request.get_json(force=True)
         if not json_data:
@@ -65,6 +69,7 @@ class TaskAssignmentController(Resource):
 
         return {"status": 'success', 'data': result}, 201
 
+    @jwt_required
     def delete(self):
         json_data = request.get_json(force=True)
         if not json_data:

@@ -16,10 +16,12 @@
 from models.Model import db
 from flask import Flask
 from app import api_bp
+from flask_jwt_simple import JWTManager
 from models import TaskStatus
 from schemas import TaskStatusSchema
 
 app = Flask(__name__)
+jwt = JWTManager(app)
 task_statuses_schema = TaskStatusSchema(many=True)
 task_status_schema = TaskStatusSchema()
 
@@ -59,5 +61,4 @@ def seed_database():
 
 if __name__ == "__main__":
     app = create_app("config")
-
-    app.run(host='0.0.0.0', port=80, debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)  #

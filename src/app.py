@@ -20,7 +20,6 @@ from controllers import TaskGroupController, TaskController, TaskStatusControlle
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
 
-
 # Route
 api.add_resource(TaskGroupController, '/taskGroups')
 api.add_resource(TaskController, '/tasks')

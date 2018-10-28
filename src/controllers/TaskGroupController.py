@@ -16,11 +16,13 @@
 from flask import request
 from flask_restful import Resource
 from services import TaskGroupService
+from flask_jwt_simple import jwt_required
 
 groupService = TaskGroupService()
 
 
 class TaskGroupController(Resource):
+    @jwt_required
     def get(self):
         # get :id
         if request.args:
@@ -40,6 +42,7 @@ class TaskGroupController(Resource):
             result = groupService.GetGroups()
             return {'status': 'success', 'data': result}, 200
 
+    @jwt_required
     def post(self):
         json_data = request.get_json(force=True)
         if not json_data:
@@ -52,6 +55,7 @@ class TaskGroupController(Resource):
 
         return {'status': 'success', 'data': result}, 201
 
+    @jwt_required
     def put(self):
         json_data = request.get_json(force=True)
         if not json_data:
@@ -63,6 +67,7 @@ class TaskGroupController(Resource):
             return {'status': 'error', 'info': err}
         return {'status': 'success', 'data': result}, 201
 
+    @jwt_required
     def delete(self):
         json_data = request.get_json(force=True)
         if not json_data:
