@@ -72,7 +72,7 @@ spec:
     spec:
       containers:
       - name: task-service
-        image: localhost:5000/clamor/task-service:latest
+        image: ${DOCKER_REG}/clamor/task-service:latest
         imagePullPolicy: Always
         command: 
         - python
