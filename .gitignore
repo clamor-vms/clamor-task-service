@@ -14,7 +14,6 @@
 # 
 .DS_Store
 *.swp
-deployment.yaml
 src/core
 src/env
 src/config.py
